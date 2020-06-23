@@ -100,7 +100,7 @@ def parse_company(company_url):
     return result
 
 
-def company_exists_id_db(name: str):
+def company_exists_in_db(name: str):
     with open_connection() as connection:
         return bool(connection.execute("SELECT id FROM company WHERE name = '{0}'".format(name)))
 
@@ -128,7 +128,7 @@ def main():
     print(urls_to_parse.__len__())
     with concurrent.futures.ThreadPoolExecutor(THREAD_LIMIT) as executor:
         for url, result in zip(urls_to_parse, executor.map(parse_company, urls_to_parse)):
-            if not company_exists_id_db(result.name):
+            if not company_exists_in_db(result.name):
                 save_company(result)
 
 
